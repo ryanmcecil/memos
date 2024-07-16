@@ -88,7 +88,7 @@ func (s *APIV1Service) CreateMemo(ctx context.Context, request *v1pb.CreateMemoR
 func (s *APIV1Service) ListMemos(ctx context.Context, request *v1pb.ListMemosRequest) (*v1pb.ListMemosResponse, error) {
 	memoFind := &store.FindMemo{
 		// Exclude comments by default.
-		ExcludeComments: true,
+		ExcludeComments: false,
 	}
 	if err := s.buildMemoFindWithFilter(ctx, memoFind, request.Filter); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "failed to build find memos with filter: %v", err)
@@ -144,7 +144,7 @@ func (s *APIV1Service) SearchMemos(ctx context.Context, request *v1pb.SearchMemo
 	defaultSearchLimit := 10
 	memoFind := &store.FindMemo{
 		// Exclude comments by default.
-		ExcludeComments: true,
+		ExcludeComments: false,
 		Limit:           &defaultSearchLimit,
 	}
 	err := s.buildMemoFindWithFilter(ctx, memoFind, request.Filter)
@@ -541,7 +541,7 @@ func (s *APIV1Service) GetUserMemosStats(ctx context.Context, request *v1pb.GetU
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
 		RowStatus:       &normalRowStatus,
-		ExcludeComments: true,
+		ExcludeComments: false,
 		ExcludeContent:  true,
 	}
 	if err := s.buildMemoFindWithFilter(ctx, memoFind, request.Filter); err != nil {
@@ -582,7 +582,7 @@ func (s *APIV1Service) ExportMemos(ctx context.Context, request *v1pb.ExportMemo
 	memoFind := &store.FindMemo{
 		RowStatus: &normalRowStatus,
 		// Exclude comments by default.
-		ExcludeComments: true,
+		ExcludeComments: false,
 	}
 	if err := s.buildMemoFindWithFilter(ctx, memoFind, request.Filter); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "failed to build find memos with filter: %v", err)
@@ -628,7 +628,7 @@ func (s *APIV1Service) ListMemoProperties(ctx context.Context, request *v1pb.Lis
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
 		RowStatus:       &normalRowStatus,
-		ExcludeComments: true,
+		ExcludeComments: false,
 		// Default exclude content for performance.
 		ExcludeContent: true,
 	}
@@ -666,7 +666,7 @@ func (s *APIV1Service) RebuildMemoProperty(ctx context.Context, request *v1pb.Re
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
 		RowStatus:       &normalRowStatus,
-		ExcludeComments: true,
+		ExcludeComments: false,
 	}
 	if (request.Name) != "memos/-" {
 		memoID, err := ExtractMemoIDFromName(request.Name)
@@ -702,7 +702,7 @@ func (s *APIV1Service) ListMemoTags(ctx context.Context, request *v1pb.ListMemoT
 	normalRowStatus := store.Normal
 	memoFind := &store.FindMemo{
 		RowStatus:       &normalRowStatus,
-		ExcludeComments: true,
+		ExcludeComments: false,
 		// Default exclude content for performance.
 		ExcludeContent: true,
 	}
@@ -743,7 +743,7 @@ func (s *APIV1Service) RenameMemoTag(ctx context.Context, request *v1pb.RenameMe
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
 		PayloadFind:     &store.FindMemoPayload{Tag: &request.OldTag},
-		ExcludeComments: true,
+		ExcludeComments: false,
 	}
 	if (request.Parent) != "memos/-" {
 		memoID, err := ExtractMemoIDFromName(request.Parent)
@@ -798,7 +798,7 @@ func (s *APIV1Service) DeleteMemoTag(ctx context.Context, request *v1pb.DeleteMe
 		CreatorID:       &user.ID,
 		PayloadFind:     &store.FindMemoPayload{Tag: &request.Tag},
 		ExcludeContent:  true,
-		ExcludeComments: true,
+		ExcludeComments: false,
 	}
 	if (request.Parent) != "memos/-" {
 		memoID, err := ExtractMemoIDFromName(request.Parent)
