@@ -4,7 +4,7 @@ import { MemoPropertyFilter, setFilter, setMemoPropertyFilter } from "../reducer
 
 export const useFilterStore = () => {
   const state = useAppSelector((state) => state.filter);
-
+ 
   return {
     state,
     getState: () => {
@@ -27,7 +27,7 @@ export const useFilterStore = () => {
         }),
       );
     },
-    setTagFilter: (tag?: string) => {
+    setTagFilter: (tag?: string[]) => {
       store.dispatch(
         setFilter({
           tag: tag,

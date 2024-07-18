@@ -36,10 +36,17 @@ const TagsSection = (props: Props) => {
   };
 
   const handleTagClick = (tag: string) => {
-    if (filterStore.getState().tag === tag) {
-      filterStore.setTagFilter(undefined);
+    const tags = filterStore.getState().tag;
+    if (tags && tags.includes(tag)) {
+      const updated_tags = tags.filter(t => t !== tag);
+      if (updated_tags.length === 0) {
+        filterStore.setTagFilter(undefined);
+      } else {
+        filterStore.setTagFilter(updated_tags);
+      }
     } else {
-      filterStore.setTagFilter(tag);
+      const updated_tags = tags ? [...tags, tag] : [tag];
+      filterStore.setTagFilter(updated_tags);
     }
   };
 
@@ -102,7 +109,7 @@ const TagsSection = (props: Props) => {
                 <div
                   className={clsx(
                     "inline-flex flex-nowrap ml-0.5 gap-0.5 cursor-pointer max-w-[calc(100%-16px)]",
-                    filterStore.state.tag === tag && "text-blue-600 dark:text-blue-400",
+                    filterStore.state.tag.includes(tag) && "text-blue-600 dark:text-blue-400",
                   )}
                   onClick={() => handleTagClick(tag)}
                 >

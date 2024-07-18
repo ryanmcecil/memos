@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Visibility } from "@/types/proto/api/v1/memo_service";
 
 interface State {
-  tag?: string;
+  tag?: string[];
   text?: string;
   visibility?: Visibility;
   memoPropertyFilter?: MemoPropertyFilter;
@@ -19,10 +19,10 @@ export type Filter = State;
 const getInitialState = (): State => {
   const state: State = {};
   const urlParams = new URLSearchParams(location.search);
-  const tag = urlParams.get("tag");
+  const tags = urlParams.getAll("tag");
   const text = urlParams.get("text");
-  if (tag) {
-    state.tag = tag;
+  if (tags.length > 0) {
+    state.tag = tags;
   }
   if (text) {
     state.text = text;

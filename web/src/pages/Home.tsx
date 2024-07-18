@@ -52,8 +52,9 @@ const Home = () => {
     if (contentSearch.length > 0) {
       filters.push(`content_search == [${contentSearch.join(", ")}]`);
     }
-    if (filter.tag) {
-      filters.push(`tag == "${filter.tag}"`);
+    if (filter.tag && filter.tag.length > 0) {
+      const tagFilters = filter.tag.map(tag => `tag == "${tag}"`).join(' || ');
+      filters.push(`(${tagFilters})`);
     }
     if (filter.memoPropertyFilter) {
       if (filter.memoPropertyFilter.hasLink) {
