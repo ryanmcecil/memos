@@ -75,21 +75,21 @@ const TagTree = ({ tags: rawTags }: Props) => {
 
 interface TagItemContainerProps {
   tag: Tag;
-  tagQuery?: string;
+  tagQuery?: string[];
 }
 
 const TagItemContainer: React.FC<TagItemContainerProps> = (props: TagItemContainerProps) => {
   const filterStore = useFilterStore();
   const { tag, tagQuery } = props;
-  const isActive = tagQuery === tag.text;
+  const isActive = tagQuery?.includes(tag.text);
   const hasSubTags = tag.subTags.length > 0;
   const [showSubTags, toggleSubTags] = useToggle(false);
 
   const handleTagClick = () => {
     if (isActive) {
-      filterStore.setTagFilter(undefined);
+      filterStore.setTagFilter([]);
     } else {
-      filterStore.setTagFilter(tag.text);
+      filterStore.setTagFilter([tag.text]);
     }
   };
 

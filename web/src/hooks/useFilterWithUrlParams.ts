@@ -9,9 +9,9 @@ const useFilterWithUrlParams = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const tag = urlParams.get("tag");
+    const tag = urlParams.getAll("tag");
     const text = urlParams.get("text");
-    if (tag) {
+    if (tag.length > 0) {
       filterStore.setTagFilter(tag);
     }
     if (text) {
@@ -21,8 +21,9 @@ const useFilterWithUrlParams = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    if (tag) {
-      urlParams.set("tag", tag);
+    if (tag && tag.length > 0) {
+      const tagString = tag.join(',');
+      urlParams.set("tag", tagString);
     } else {
       urlParams.delete("tag");
     }

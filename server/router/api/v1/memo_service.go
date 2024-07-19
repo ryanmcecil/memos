@@ -742,7 +742,7 @@ func (s *APIV1Service) RenameMemoTag(ctx context.Context, request *v1pb.RenameMe
 
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
-		PayloadFind:     &store.FindMemoPayload{Tag: &request.OldTag},
+		PayloadFind:     &store.FindMemoPayload{Tag: &[]string{request.OldTag}},
 		ExcludeComments: false,
 	}
 	if (request.Parent) != "memos/-" {
@@ -796,7 +796,7 @@ func (s *APIV1Service) DeleteMemoTag(ctx context.Context, request *v1pb.DeleteMe
 
 	memoFind := &store.FindMemo{
 		CreatorID:       &user.ID,
-		PayloadFind:     &store.FindMemoPayload{Tag: &request.Tag},
+		PayloadFind:     &store.FindMemoPayload{Tag: &[]string{request.Tag}},
 		ExcludeContent:  true,
 		ExcludeComments: false,
 	}
@@ -1089,7 +1089,7 @@ var SearchMemosFilterCELAttributes = []cel.EnvOption{
 type SearchMemosFilter struct {
 	ContentSearch      []string
 	Visibilities       []store.Visibility
-	Tag                *string
+	Tag                *[]string
 	OrderByPinned      bool
 	DisplayTimeBefore  *int64
 	DisplayTimeAfter   *int64
@@ -1143,7 +1143,13 @@ func findSearchMemosField(callExpr *expr.Expr_Call, filter *SearchMemosFilter) {
 				filter.Visibilities = visibilities
 			} else if idExpr.Name == "tag" {
 				tag := callExpr.Args[1].GetConstExpr().GetStringValue()
-				filter.Tag = &tag
+				tags := []string{tag}
+				if filter.Tag != nil && len(*filter.Tag) > 0 {
+					tags = append(*filter.Tag, tag)
+					filter.Tag = &tags
+				} else {
+					filter.Tag = &tags
+				}
 			} else if idExpr.Name == "order_by_pinned" {
 				value := callExpr.Args[1].GetConstExpr().GetBoolValue()
 				filter.OrderByPinned = value

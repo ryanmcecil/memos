@@ -84,7 +84,7 @@ type FindMemo struct {
 
 type FindMemoPayload struct {
 	Raw                *string
-	Tag                *string
+	Tag                *[]string
 	HasLink            bool
 	HasTaskList        bool
 	HasCode            bool

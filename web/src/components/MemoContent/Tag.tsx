@@ -16,11 +16,9 @@ const Tag: React.FC<Props> = ({ content }: Props) => {
       return;
     }
 
-    const currTagQuery = filterStore.getState().tag;
-    if (currTagQuery === content) {
-      filterStore.setTagFilter(undefined);
-    } else {
-      filterStore.setTagFilter(content);
+    const currTagQueries = filterStore.getState().tag;
+    if (currTagQueries && !currTagQueries.includes(content)){
+      filterStore.setTagFilter([content]);
     }
   };
 
