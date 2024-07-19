@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"slices"
 	"time"
+	"unicode/utf8"
 
 	"github.com/google/cel-go/cel"
 	"github.com/lithammer/shortuuid/v4"
@@ -600,7 +601,7 @@ func (s *APIV1Service) ExportMemos(ctx context.Context, request *v1pb.ExportMemo
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to convert memo")
 		}
-		file, err := writer.Create(time.Unix(memo.CreatedTs, 0).Format(time.RFC3339) + "-" + string(memo.Visibility) + ".md")
+		file, err := writer.Create(time.Unix(memo.CreatedTs, 0).Format(time.RFC3339) + "-" + memo.UID + "-" + string(memo.Visibility) + ".md")
 		if err != nil {
 			return nil, status.Errorf(codes.Internal, "Failed to create memo file")
 		}
@@ -1307,5 +1308,27 @@ func getMemoContentSnippet(content string) (string, error) {
 	}
 
 	plainText := renderer.NewStringRenderer().Render(nodes)
+	if len(plainText) > 100 {
+		return substring(plainText, 100) + "...", nil
+	}
 	return plainText, nil
+}
+
+func substring(s string, length int) string {
+	if length <= 0 {
+		return ""
+	}
+
+	runeCount := 0
+	byteIndex := 0
+	for byteIndex < len(s) {
+		_, size := utf8.DecodeRuneInString(s[byteIndex:])
+		byteIndex += size
+		runeCount++
+		if runeCount == length {
+			break
+		}
+	}
+
+	return s[:byteIndex]
 }
