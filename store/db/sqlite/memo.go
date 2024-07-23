@@ -84,11 +84,15 @@ func (d *DB) ListMemos(ctx context.Context, find *store.FindMemo) ([]*store.Memo
 		}
 		if v.Tag != nil && len(*v.Tag) > 0 {
 			tags := *v.Tag
-			println(tags)
 			var placeholders []string
 			for _, tag := range tags {
-				placeholders = append(placeholders, "JSON_EXTRACT(`memo`.`payload`, '$.property.tags') LIKE ?")
-				args = append(args, fmt.Sprintf(`%%"%s"%%`, tag))
+				if strings.HasPrefix(tag, "negate") {
+					placeholders = append(placeholders, "JSON_EXTRACT(`memo`.`payload`, '$.property.tags') NOT LIKE ?")
+					args = append(args, fmt.Sprintf(`%%"%s"%%`, tag[len("negate"):]))
+				} else {
+					placeholders = append(placeholders, "JSON_EXTRACT(`memo`.`payload`, '$.property.tags') LIKE ?")
+					args = append(args, fmt.Sprintf(`%%"%s"%%`, tag))
+				}
 			}
 			where = append(where, strings.Join(placeholders, " AND "))
 		}

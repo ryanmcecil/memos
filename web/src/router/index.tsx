@@ -7,6 +7,7 @@ import Archived from "@/pages/Archived";
 import AuthCallback from "@/pages/AuthCallback";
 import Explore from "@/pages/Explore";
 import Home from "@/pages/Home";
+import DistillPage from "@/pages/Distill";
 import Inboxes from "@/pages/Inboxes";
 import MemoDetail from "@/pages/MemoDetail";
 import NotFound from "@/pages/NotFound";
@@ -21,6 +22,7 @@ import UserProfile from "@/pages/UserProfile";
 export enum Routes {
   ROOT = "/",
   HOME = "/home",
+  DISTILL = "/distill",
   TIMELINE = "/timeline",
   RESOURCES = "/resources",
   INBOX = "/inbox",
@@ -61,6 +63,10 @@ const router = createBrowserRouter([
           {
             path: Routes.HOME,
             element: <Home />,
+          },
+          {
+            path: Routes.DISTILL,
+            element: <DistillPage />,
           },
           {
             path: Routes.TIMELINE,

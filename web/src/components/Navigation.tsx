@@ -54,6 +54,12 @@ const Navigation = (props: Props) => {
     title: t("common.home"),
     icon: <Icon.Home className="w-6 h-auto opacity-70 shrink-0" />,
   };
+  const distillNavLink: NavLinkItem = {
+    id: "header-distill",
+    path: Routes.DISTILL,
+    title: t("common.distillation"),
+    icon: <Icon.Book className="w-6 h-auto opacity-70 shrink-0" />,
+  };
   const timelineNavLink: NavLinkItem = {
     id: "header-timeline",
     path: Routes.TIMELINE,
@@ -117,7 +123,7 @@ const Navigation = (props: Props) => {
   };
 
   const navLinks: NavLinkItem[] = user
-    ? [homeNavLink, timelineNavLink, resourcesNavLink, exploreNavLink, profileNavLink, inboxNavLink, archivedNavLink, settingNavLink]
+    ? [homeNavLink, distillNavLink, timelineNavLink, resourcesNavLink, exploreNavLink, profileNavLink, inboxNavLink, archivedNavLink, settingNavLink]
     : [exploreNavLink, signInNavLink, aboutNavLink];
 
   return (

@@ -38,12 +38,19 @@ const TagsSection = (props: Props) => {
 
   const handleTagClick = (tag: string) => {
     const tags = filterStore.getState().tag;
+    const negated_tag = `negate${tag}`;
     if (tags && tags.includes(tag)) {
-      const updated_tags = tags.filter(t => t !== tag);
+      const removed_tags = tags.filter(t => t !== tag);
+      const updated_tags = removed_tags ? [...removed_tags, negated_tag] : [negated_tag];
       filterStore.setTagFilter(updated_tags);
     } else {
-      const updated_tags = tags ? [...tags, tag] : [tag];
-      filterStore.setTagFilter(updated_tags);
+      if (tags && tags.includes(negated_tag)) {
+        const updated_tags = tags.filter(t => t !== negated_tag);
+        filterStore.setTagFilter(updated_tags);
+      } else {
+          const updated_tags = tags ? [...tags, tag] : [tag];
+          filterStore.setTagFilter(updated_tags);
+            }
     }
   };
 
@@ -109,6 +116,7 @@ const TagsSection = (props: Props) => {
                   className={clsx(
                     "inline-flex flex-nowrap ml-0.5 gap-0.5 cursor-pointer max-w-[calc(100%-16px)]",
                     filterStore.state.tag && filterStore.state.tag.includes(tag) && "text-blue-600 dark:text-blue-400",
+                    filterStore.state.tag && filterStore.state.tag.includes(`negate${tag}`) && "text-red-600 dark:text-red-400",
                   )}
                   onClick={() => handleTagClick(tag)}
                 >

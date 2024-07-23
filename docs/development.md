@@ -24,7 +24,7 @@ Memos is built with a curated tech stack. It is optimized for developer experien
 2. Start backend server with [`air`](https://github.com/cosmtrek/air) (with live reload)
 
    ```bash
-   air -c scripts/.air.toml
+   /home/ryan/bin/air -c scripts/.air.toml
    ```
 
 3. Install frontend dependencies and generate TypeScript code from protobuf
