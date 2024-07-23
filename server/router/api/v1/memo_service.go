@@ -1073,6 +1073,7 @@ var SearchMemosFilterCELAttributes = []cel.EnvOption{
 	cel.Variable("visibilities", cel.ListType(cel.StringType)),
 	cel.Variable("tag", cel.StringType),
 	cel.Variable("order_by_pinned", cel.BoolType),
+	cel.Variable("order_descending", cel.BoolType),
 	cel.Variable("display_time_before", cel.IntType),
 	cel.Variable("display_time_after", cel.IntType),
 	cel.Variable("creator", cel.StringType),
@@ -1092,6 +1093,7 @@ type SearchMemosFilter struct {
 	Visibilities       []store.Visibility
 	Tag                *[]string
 	OrderByPinned      bool
+	OrderDescending    bool
 	DisplayTimeBefore  *int64
 	DisplayTimeAfter   *int64
 	Creator            *string
@@ -1154,6 +1156,9 @@ func findSearchMemosField(callExpr *expr.Expr_Call, filter *SearchMemosFilter) {
 			} else if idExpr.Name == "order_by_pinned" {
 				value := callExpr.Args[1].GetConstExpr().GetBoolValue()
 				filter.OrderByPinned = value
+			} else if idExpr.Name == "order_descending" {
+				value := callExpr.Args[1].GetConstExpr().GetBoolValue()
+				filter.OrderDescending = value
 			} else if idExpr.Name == "display_time_before" {
 				displayTimeBefore := callExpr.Args[1].GetConstExpr().GetInt64Value()
 				filter.DisplayTimeBefore = &displayTimeBefore

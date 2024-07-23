@@ -44,7 +44,7 @@ const Home = () => {
 
   const fetchMemos = async (nextPageToken: string) => {
     setIsRequesting(true);
-    const filters = [`creator == "${user.name}"`, `row_status == "NORMAL"`, `order_by_pinned == true`];
+    const filters = [`creator == "${user.name}"`, `row_status == "NORMAL"`, `order_by_pinned == true`, `order_descending == true`];
     const contentSearch: string[] = [];
     if (filter.text) {
       contentSearch.push(JSON.stringify(filter.text));

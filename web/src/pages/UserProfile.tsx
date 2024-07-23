@@ -68,7 +68,7 @@ const UserProfile = () => {
     }
 
     setIsRequesting(true);
-    const filters = [`creator == "${user.name}"`, `row_status == "NORMAL"`, `order_by_pinned == true`];
+    const filters = [`creator == "${user.name}"`, `row_status == "NORMAL"`, `order_by_pinned == true`, `order_descending == true`];
     const contentSearch: string[] = [];
     if (textQuery) {
       contentSearch.push(JSON.stringify(textQuery));

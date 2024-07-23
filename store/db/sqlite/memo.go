@@ -112,17 +112,20 @@ func (d *DB) ListMemos(ctx context.Context, find *store.FindMemo) ([]*store.Memo
 	if find.ExcludeComments {
 		where = append(where, "`parent_id` IS NULL")
 	}
-
 	orderBy := []string{}
+	var order string = "DESC"
+	if !find.OrderDescending {
+		order = "ASC"
+	}
 	if find.OrderByPinned {
-		orderBy = append(orderBy, "`pinned` DESC")
+		orderBy = append(orderBy, "`pinned` "+order)
 	}
 	if find.OrderByUpdatedTs {
-		orderBy = append(orderBy, "`updated_ts` DESC")
+		orderBy = append(orderBy, "`updated_ts` "+order)
 	} else {
-		orderBy = append(orderBy, "`created_ts` DESC")
+		orderBy = append(orderBy, "`created_ts` "+order)
 	}
-	orderBy = append(orderBy, "`id` DESC")
+	orderBy = append(orderBy, "`id` "+order)
 	if find.Random {
 		orderBy = []string{"RANDOM()"}
 	}
