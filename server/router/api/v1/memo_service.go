@@ -969,6 +969,9 @@ func (s *APIV1Service) buildMemoFindWithFilter(ctx context.Context, find *store.
 		if filter.OrderByPinned {
 			find.OrderByPinned = filter.OrderByPinned
 		}
+		if filter.OrderDescending {
+			find.OrderDescending = filter.OrderDescending
+		}
 		if filter.DisplayTimeAfter != nil {
 			workspaceMemoRelatedSetting, err := s.Store.GetWorkspaceMemoRelatedSetting(ctx)
 			if err != nil {
